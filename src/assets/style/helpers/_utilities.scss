@@ -1,21 +1,21 @@
 $utilities: map-merge(
   $utilities,
   (
-    "font-size":
+    'font-size':
       map-merge(
-        map-get($utilities, "font-size"),
+        map-get($utilities, 'font-size'),
         (
           responsive: true,
           rfs: false
         )
       ),
-    "font-weight": (
+    'font-weight': (
       responsive: true,
       property: font-weight,
       class: fw,
       values: $weightValue
     ),
-    "text-opacity": (
+    'text-opacity': (
       css-var: true,
       class: text-opacity,
       values: (
@@ -26,7 +26,7 @@ $utilities: map-merge(
         100: 1
       )
     ),
-    "bg-opacity": (
+    'bg-opacity': (
       css-var: true,
       class: bg-opacity,
       values: (
@@ -39,7 +39,7 @@ $utilities: map-merge(
         100: 1
       )
     ),
-    "letter-spacing": (
+    'letter-spacing': (
       responsive: true,
       property: letter-spacing,
       class: letter-spacing,
@@ -54,7 +54,7 @@ $utilities: map-merge(
         32: 32px
       )
     ),
-    "writing-mode": (
+    'writing-mode': (
       responsive: true,
       property: writing-mode,
       class: vertical,
@@ -63,18 +63,18 @@ $utilities: map-merge(
         lr: vertical-lr
       )
     ),
-    "object-fit": (
+    'object-fit': (
       property: object-fit,
       class: object,
       values: cover
     ),
-    "cursor": (
+    'cursor': (
       property: cursor,
       class: cursor,
       values: pointer
     ),
 
-    "height": (
+    'height': (
       property: height,
       responsive: true,
       class: h,
@@ -97,15 +97,15 @@ $utilities: map-merge(
         auto: auto
       )
     ),
-    "width":
+    'width':
       map-merge(
-        map-get($utilities, "width"),
+        map-get($utilities, 'width'),
         (
           class: w,
           responsive: true,
           values:
             map-merge(
-              map-get(map-get($utilities, "width"), "values"),
+              map-get(map-get($utilities, 'width'), 'values'),
               (
                 1: 1px,
                 2n: 8px,
@@ -141,19 +141,19 @@ $utilities: map-merge(
             )
         )
       ),
-    "z-index": (
+    'z-index': (
       property: z-index,
       responsive: true,
       class: z,
       values: $zindex-values
     ),
-    "start": (
+    'start': (
       property: left,
       class: start,
       responsive: true,
       values: $position-values
     ),
-    "border-opacity": (
+    'border-opacity': (
       css-var: true,
       class: border-opacity,
       values: (
@@ -166,7 +166,7 @@ $utilities: map-merge(
         100: 1
       )
     ),
-    "shadow": (
+    'shadow': (
       property: box-shadow,
       class: shadow,
       responsive: true,
@@ -177,13 +177,88 @@ $utilities: map-merge(
         none: none
       )
     ),
-    "overflow-x": (
+    'overflow-x': (
       property: overflow-x,
       values: auto hidden visible scroll
     ),
-    "overflow-y": (
+    'overflow-y': (
       property: overflow-y,
       values: auto hidden visible scroll
+    ),
+    'rounded': (
+      property: border-radius,
+      class: rounded,
+      values: (
+        null: var(--#{$prefix}border-radius),
+        0: 0,
+        1: var(--#{$prefix}border-radius-sm),
+        2: var(--#{$prefix}border-radius),
+        3: var(--#{$prefix}border-radius-lg),
+        4: var(--#{$prefix}border-radius-xl),
+        5: var(--#{$prefix}border-radius-2xl),
+        circle: 50%,
+        pill: var(--#{$prefix}border-radius-pill)
+      )
+    ),
+    'rounded-top': (
+      property: border-top-left-radius border-top-right-radius,
+      class: rounded-top,
+      values: (
+        null: var(--#{$prefix}border-radius),
+        0: 0,
+        1: var(--#{$prefix}border-radius-sm),
+        2: var(--#{$prefix}border-radius),
+        3: var(--#{$prefix}border-radius-lg),
+        4: var(--#{$prefix}border-radius-xl),
+        5: var(--#{$prefix}border-radius-2xl),
+        circle: 50%,
+        pill: var(--#{$prefix}border-radius-pill)
+      )
+    ),
+    'rounded-end': (
+      property: border-top-right-radius border-bottom-right-radius,
+      class: rounded-end,
+      values: (
+        null: var(--#{$prefix}border-radius),
+        0: 0,
+        1: var(--#{$prefix}border-radius-sm),
+        2: var(--#{$prefix}border-radius),
+        3: var(--#{$prefix}border-radius-lg),
+        4: var(--#{$prefix}border-radius-xl),
+        5: var(--#{$prefix}border-radius-2xl),
+        circle: 50%,
+        pill: var(--#{$prefix}border-radius-pill)
+      )
+    ),
+    'rounded-bottom': (
+      property: border-bottom-right-radius border-bottom-left-radius,
+      class: rounded-bottom,
+      values: (
+        null: var(--#{$prefix}border-radius),
+        0: 0,
+        1: var(--#{$prefix}border-radius-sm),
+        2: var(--#{$prefix}border-radius),
+        3: var(--#{$prefix}border-radius-lg),
+        4: var(--#{$prefix}border-radius-xl),
+        5: var(--#{$prefix}border-radius-2xl),
+        circle: 50%,
+        pill: var(--#{$prefix}border-radius-pill)
+      )
+    ),
+    'rounded-start': (
+      property: border-bottom-left-radius border-top-left-radius,
+      class: rounded-start,
+      values: (
+        null: var(--#{$prefix}border-radius),
+        0: 0,
+        1: var(--#{$prefix}border-radius-sm),
+        2: var(--#{$prefix}border-radius),
+        3: var(--#{$prefix}border-radius-lg),
+        4: var(--#{$prefix}border-radius-xl),
+        5: var(--#{$prefix}border-radius-2xl),
+        circle: 50%,
+        pill: var(--#{$prefix}border-radius-pill)
+      )
     )
   )
 );
