@@ -168,30 +168,13 @@ export default {
       if (canvasRef === 'frontendChartCanvas') {
         this.showFrontend = true
         this.canvasRef = this.$refs.frontendChartCanvas
+        this.renderPieChart(this.canvasRef)
         console.log(this.canvasRef)
       } else if (canvasRef === 'designerChartCanvas') {
         this.showFrontend = false
         this.canvasRef = this.$refs.designerChartCanvas
+        this.renderPieChart(this.canvasRef)
       }
-      this.renderPieChart(this.canvasRef)
-    },
-    renderPieChart(canvasRef) {
-      if (canvasRef.chart) {
-        canvasRef.chart.destroy()
-      }
-      // 創建新的圖表實例
-      const ctx = canvasRef.getContext('2d')
-      canvasRef.chart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: this.chartLabels,
-          datasets: [
-            {
-              data: this.chartData
-            }
-          ]
-        }
-      })
     },
     selectTenurePie(tenure, jobType) {
       let url =
@@ -213,6 +196,24 @@ export default {
         this.chartLabels = Object.keys(salaryByTenure[tenure])
         this.chartData = Object.values(salaryByTenure[tenure])
         this.renderPieChart(this.canvasRef)
+      })
+    },
+    renderPieChart(canvasRef) {
+      if (canvasRef.chart) {
+        canvasRef.chart.destroy()
+      }
+      // 創建新的圖表實例
+      const ctx = canvasRef.getContext('2d')
+      canvasRef.chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: this.chartLabels,
+          datasets: [
+            {
+              data: this.chartData
+            }
+          ]
+        }
       })
     }
   },
