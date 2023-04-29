@@ -1,42 +1,37 @@
 <template>
-  <main>
-    <div class="container">
-      <h1 class="fs-sm p-6 shadow bg-light fw-bold mb-10">2021 薪資數據圖表調查</h1>
-
-      <div class="row">
-        <div class="col-3">
-          <div>
-            <h2 class="bg-primary text-light p-6 fs-sm mb-0 rounded-top-3">資訊類別</h2>
-            <ul class="list-group mb-6">
-              <li class="list-group-item p-6 text-primary">平均年薪</li>
-              <li class="list-group-item p-6 text-primary">首份工作使用技術及軟體</li>
-              <li class="list-group-item p-6 text-primary">工作相關資訊</li>
-              <li class="list-group-item p-6 text-primary">薪資與產業滿意度</li>
-            </ul>
-          </div>
-          <div>
-            <h2 class="bg-primary text-light p-6 fs-sm mb-0 rounded-top-3">圖表類別</h2>
-            <ul class="list-group mb-6">
-              <li>
-                <RouterLink to="/" class="list-group-item p-6 text-primary">圓餅圖</RouterLink>
-              </li>
-              <li>
-                <RouterLink to="line" class="list-group-item p-6 text-primary">折線圖</RouterLink>
-              </li>
-              <li>
-                <RouterLink to="bar" class="list-group-item p-6 text-primary">長條圖</RouterLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-9">
-          <div class="row justify-content-center">
-            <RouterView />
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+  <div>這是圓餅圖</div>
+  <div class="col-12 d-flex align-items-center justify-content-center">
+    <button
+      type="button"
+      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+      @click="switchCanvas('frontendChartCanvas')"
+    >
+      前端工程師
+    </button>
+    <button
+      type="button"
+      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+      @click="switchCanvas('designerChartCanvas')"
+    >
+      UI設計師
+    </button>
+  </div>
+  <div v-if="showFrontend">
+    <select v-model="selectedTenure" @change="selectTenurePie(selectedTenure, 'frontend')">
+      <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+        {{ tenure }}
+      </option>
+    </select>
+    <canvas ref="frontendChartCanvas"></canvas>
+  </div>
+  <div v-if="!showFrontend">
+    <select v-model="selectedTenure" @change="selectTenurePie(selectedTenure, 'designer')">
+      <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+        {{ tenure }}
+      </option>
+    </select>
+    <canvas v-if="!showFrontend" ref="designerChartCanvas"></canvas>
+  </div>
 </template>
 
 <style lang="scss">
