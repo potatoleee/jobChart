@@ -93,7 +93,7 @@ export default {
       chartLabels: [],
       chartData: [],
       showFrontend: true,
-      canvasRef: null
+      canvasRef: 'frontendChartCanvas'
     }
   },
   methods: {
@@ -175,6 +175,9 @@ export default {
         this.canvasRef = this.$refs.designerChartCanvas
         this.renderPieChart(this.canvasRef)
       }
+      if (this.canvasRef !== null) {
+        this.renderPieChart(this.canvasRef)
+      }
     },
     selectTenurePie(tenure, jobType) {
       let url =
@@ -199,12 +202,15 @@ export default {
       })
     },
     renderPieChart(canvasRef) {
-      if (canvasRef.chart) {
-        canvasRef.chart.destroy()
+      if (!canvasRef) {
+        return // 當 canvasRef 為 null 或 undefined 時退出函數
+      }
+      if (this.canvasRef.chart) {
+        this.canvasRef.chart.destroy()
       }
       // 創建新的圖表實例
-      const ctx = canvasRef.getContext('2d')
-      canvasRef.chart = new Chart(ctx, {
+      const ctx = this.canvasRef.getContext('2d')
+      this.canvasRef.chart = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: this.chartLabels,
@@ -218,7 +224,7 @@ export default {
     }
   },
   mounted() {
-    // this.switchCanvas('frontendChartCanvas')
+    this.switchCanvas('frontendChartCanvas')
     this.selectTenurePie('1 年以下', 'frontend')
   }
 }
