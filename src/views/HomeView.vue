@@ -26,19 +26,46 @@
           </div>
         </div>
         <div class="col-9">
-          <div class="row">
-            <div class="col-4">
-              <h3 class="fs-base">前端工程師</h3>
-              <h3 class="fs-base">UI設計師</h3>
+          <div class="row justify-content-center">
+            <div class="col-12 d-flex align-items-center justify-content-center">
+              <button
+                type="button"
+                class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+                @click="switchCanvas('frontendChartCanvas')"
+              >
+                前端工程師
+              </button>
+              <button
+                type="button"
+                class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+                @click="switchCanvas('designerChartCanvas')"
+              >
+                UI設計師
+              </button>
             </div>
-            <select v-model="selectedTenure" @change="selectTenurePie(selectedTenure)">
-              <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
-                {{ tenure }}
-              </option>
-            </select>
+            <div v-if="showFrontend">
+              <select
+                v-model="selectedTenure"
+                @change="selectTenurePie(selectedTenure, 'frontend')"
+              >
+                <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+                  {{ tenure }}
+                </option>
+              </select>
+              <canvas ref="frontendChartCanvas"></canvas>
+            </div>
+            <div v-if="!showFrontend">
+              <select
+                v-model="selectedTenure"
+                @change="selectTenurePie(selectedTenure, 'designer')"
+              >
+                <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+                  {{ tenure }}
+                </option>
+              </select>
+              <canvas v-if="!showFrontend" ref="designerChartCanvas"></canvas>
+            </div>
           </div>
-
-          <canvas ref="chartCanvas"></canvas>
         </div>
       </div>
     </div>
@@ -54,17 +81,19 @@ import Chart from 'chart.js/auto'
 export default {
   data() {
     return {
-      chart: null,
       salaries: [],
       salaryCountAll: {},
       selectedTenure: '1 年以下',
       tenures: [],
       jobTenure: [],
       frontendData: [],
+      UiData: [],
       chartLabelsAll: [],
       chartDataAll: [],
       chartLabels: [],
-      chartData: []
+      chartData: [],
+      showFrontend: true,
+      canvasRef: null
     }
   },
   methods: {
@@ -114,16 +143,11 @@ export default {
           this.chartDataAll = Object.values(this.salaryCountAll)
         })
     },
-    selectTenurePie(tenure) {
-      console.log('更換年資')
+    selectTenurePieUi(tenure) {
       this.$http
-        .get(
-          'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
-        )
+        .get('https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json')
         .then((res) => {
-          console.log(res.data)
-          this.frontendData = res.data
-          const salaryByTenure = this.frontendData.reduce((acc, cur) => {
+          const salaryByTenure = res.data.reduce((acc, cur) => {
             const { job_tenure, salary } = cur.company
             acc[job_tenure] = Object.assign(acc[job_tenure] || {}, {
               [salary]: ((acc[job_tenure] && acc[job_tenure][salary]) || 0) + 1
@@ -139,24 +163,25 @@ export default {
           this.renderPieChart()
         })
     },
-    getUi() {
-      this.$http
-        .get('https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json')
-        .then((res) => {
-          console.log(res.data)
-          this.salaries = res.data
-          this.salaries.forEach((item) => {
-            console.log(item)
-          })
-        })
+    switchCanvas(canvasRef) {
+      console.log('切換圖表', canvasRef)
+      if (canvasRef === 'frontendChartCanvas') {
+        this.showFrontend = true
+        this.canvasRef = this.$refs.frontendChartCanvas
+        console.log(this.canvasRef)
+      } else if (canvasRef === 'designerChartCanvas') {
+        this.showFrontend = false
+        this.canvasRef = this.$refs.designerChartCanvas
+      }
+      this.renderPieChart(this.canvasRef)
     },
-    renderPieChart() {
-      if (this.chart) {
-        this.chart.destroy()
+    renderPieChart(canvasRef) {
+      if (canvasRef.chart) {
+        canvasRef.chart.destroy()
       }
       // 創建新的圖表實例
-      const ctx = this.$refs.chartCanvas.getContext('2d')
-      this.chart = new Chart(ctx, {
+      const ctx = canvasRef.getContext('2d')
+      canvasRef.chart = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: this.chartLabels,
@@ -167,10 +192,33 @@ export default {
           ]
         }
       })
+    },
+    selectTenurePie(tenure, jobType) {
+      let url =
+        'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
+      if (jobType === 'designer') {
+        url = 'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json'
+      }
+      this.$http.get(url).then((res) => {
+        const salaryByTenure = res.data.reduce((acc, cur) => {
+          const { job_tenure, salary } = cur.company
+          acc[job_tenure] = Object.assign(acc[job_tenure] || {}, {
+            [salary]: ((acc[job_tenure] && acc[job_tenure][salary]) || 0) + 1
+          })
+          return acc
+        }, {})
+        this.tenures = Object.keys(salaryByTenure) //年資 key
+        this.tenures.pop()
+
+        this.chartLabels = Object.keys(salaryByTenure[tenure])
+        this.chartData = Object.values(salaryByTenure[tenure])
+        this.renderPieChart(this.canvasRef)
+      })
     }
   },
   mounted() {
-    this.selectTenurePie('1 年以下')
+    // this.switchCanvas('frontendChartCanvas')
+    this.selectTenurePie('1 年以下', 'frontend')
   }
 }
 </script>
