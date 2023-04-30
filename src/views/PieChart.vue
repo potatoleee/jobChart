@@ -30,7 +30,7 @@
         {{ tenure }}
       </option>
     </select>
-    <canvas v-if="!showFrontend" ref="designerChartCanvas"></canvas>
+    <canvas ref="designerChartCanvas"></canvas>
   </div>
 </template>
 
