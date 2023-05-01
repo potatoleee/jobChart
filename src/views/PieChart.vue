@@ -4,15 +4,17 @@
   <div class="col-12 d-flex align-items-center justify-content-center">
     <button
       type="button"
-      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+      class="btn btn-light fs-base py-2 px-12 mb-0 shadow"
       @click="switchCanvas('frontendChartCanvas')"
+      :class="showFrontend ? 'bg-primary text-light' : 'bg-light'"
     >
       前端工程師
     </button>
     <button
       type="button"
-      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
+      class="btn btn-light fs-base py-2 px-12 mb-0 shadow"
       @click="switchCanvas('designerChartCanvas')"
+      :class="showFrontend ? 'bg-light' : 'bg-primary text-light'"
     >
       UI設計師
     </button>
@@ -59,10 +61,10 @@ export default {
       if (chartCanvasRef === 'frontendChartCanvas') {
         console.log('目前職位:', chartCanvasRef, canvasRef)
         showFrontend.value = true
-        if (!canvasRef.value) {
-          canvasRef.value = frontendChartCanvas.value
-          renderPieChart(canvasRef.value)
-        }
+        canvasRef.value = frontendChartCanvas.value
+        console.log(canvasRef.value)
+        renderPieChart(canvasRef.value)
+
         // canvasRef.value = frontendChartCanvas.value
         selectTenurePie('1 年以下', 'frontend')
       } else if (chartCanvasRef === 'designerChartCanvas') {
