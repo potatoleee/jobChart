@@ -57,20 +57,26 @@ export default {
     const designerChartCanvas = ref(null)
     const switchCanvas = (chartCanvasRef) => {
       if (chartCanvasRef === 'frontendChartCanvas') {
-        console.log('目前職位:', chartCanvasRef)
+        console.log('目前職位:', chartCanvasRef, canvasRef)
         showFrontend.value = true
-        canvasRef.value = frontendChartCanvas.value
-        renderPieChart(canvasRef.value)
+        if (!canvasRef.value) {
+          canvasRef.value = frontendChartCanvas.value
+          renderPieChart(canvasRef.value)
+        }
+        // canvasRef.value = frontendChartCanvas.value
         selectTenurePie('1 年以下', 'frontend')
       } else if (chartCanvasRef === 'designerChartCanvas') {
-        console.log('目前職位:', chartCanvasRef)
+        console.log('目前職位:', chartCanvasRef, canvasRef)
         showFrontend.value = false
+
         canvasRef.value = designerChartCanvas.value
+
         renderPieChart(canvasRef.value)
         selectTenurePie('1 年以下', 'designer')
       }
     }
     onMounted(() => {
+      console.log(canvasRef.value)
       switchCanvas('frontendChartCanvas')
     })
 
@@ -101,6 +107,7 @@ export default {
 
     const renderPieChart = (PieCanvasRef) => {
       if (!PieCanvasRef) {
+        console.log('PieCanvasRef===null')
         return // 當 canvasRef 為 null 或 undefined 時退出函數
       }
       if (PieCanvasRef.chart) {
@@ -108,6 +115,7 @@ export default {
       }
       // 創建新的圖表實例
       const ctx = PieCanvasRef.getContext('2d')
+
       PieCanvasRef.chart = new Chart(ctx, {
         type: 'pie',
         data: {
