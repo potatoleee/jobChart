@@ -3,15 +3,17 @@
   <div class="col-12 d-flex align-items-center justify-content-center">
     <button
       type="button"
-      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
-      @click="switchCanvas('frontendChartCanvas')"
+      class="btn btn-light fs-base py-2 px-12 mb-0 shadow"
+      @click="getAllAverageSalary('frontend')"
+      :class="showFrontend ? 'bg-primary text-light' : 'bg-light'"
     >
       前端工程師
     </button>
     <button
       type="button"
-      class="btn btn-light fs-base py-2 px-12 mb-0 bg-light shadow"
-      @click="switchCanvas('designerChartCanvas')"
+      class="btn btn-light fs-base py-2 px-12 mb-0 shadow"
+      @click="getAllAverageSalary('designer')"
+      :class="showFrontend ? 'bg-light' : 'bg-primary text-light'"
     >
       UI設計師
     </button>
@@ -30,152 +32,94 @@
 
 <script>
 import Chart from 'chart.js/auto'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 export default {
-  data() {
-    return {
-      salaries: [],
-      salaryCountAll: {},
-      selectedTenure: '1 年以下',
-      tenures: [],
-      jobTenure: [],
-      frontendData: [],
-      UiData: [],
-      chartLabelsAll: [],
-      chartDataAll: [],
-      chartLabels: [],
-      chartData: [],
-      showFrontend: true,
-      canvasRef: 'frontendChartCanvas'
-    }
-  },
-  methods: {
-    getFrontend() {
-      this.$http
-        .get(
+  setup() {
+    const salaries = ref([])
+    const salaryCountAll = ref({})
+    const chartLabelsAll = ref([])
+    const chartDataAll = ref([])
+    const showFrontend = ref(true)
+    const canvasRef = ref(null)
+    const frontendChartCanvas = ref(null)
+    const designerChartCanvas = ref(null)
+
+    const getAllAverageSalary = (jobType) => {
+      let url = ''
+      if (jobType === 'frontend') {
+        console.log(jobType)
+        url =
           'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
-        )
-        .then((res) => {
-          console.log(res.data)
-          this.frontendData = res.data
-          const salaryByTenure = this.frontendData.reduce((acc, cur) => {
-            const { job_tenure, salary } = cur.company
-            acc[job_tenure] = Object.assign(acc[job_tenure] || {}, {
-              [salary]: ((acc[job_tenure] && acc[job_tenure][salary]) || 0) + 1
-            })
-            return acc
-          }, {})
-
-          this.tenures = Object.keys(salaryByTenure) //年資 key
-          console.log(this.tenures)
-
-          this.jobTenure = res.data.map((item) => {
-            return item.company.job_tenure
-          })
-
-          this.salaries = res.data.map((item) => {
-            // 移除「萬」字樣，转化为数字并除以 1000
-            return item.company.salary
-          })
-          console.log('全部薪資陣列', this.salaries)
-          this.salaryCountAll = this.salaries.reduce((acc, val) => {
-            if (!acc[val]) {
-              acc[val] = 1
-            } else {
-              acc[val]++
-            }
-            return acc
-          }, {})
-          console.log(this.salaryCountAll)
-          this.chartLabelsAll = Object.keys(this.salaryCountAll)
-          this.chartDataAll = Object.values(this.salaryCountAll)
-          console.log(this.chartLabelsAll, this.chartDataAll)
-          this.renderPieChart(this.canvasRef)
-        })
-    },
-    selectTenurePieUi(tenure) {
-      this.$http
-        .get('https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json')
-        .then((res) => {
-          const salaryByTenure = res.data.reduce((acc, cur) => {
-            const { job_tenure, salary } = cur.company
-            acc[job_tenure] = Object.assign(acc[job_tenure] || {}, {
-              [salary]: ((acc[job_tenure] && acc[job_tenure][salary]) || 0) + 1
-            })
-            return acc
-          }, {})
-          this.tenures = Object.keys(salaryByTenure) //年資 key
-          this.tenures.pop()
-          console.log(salaryByTenure[tenure])
-          this.chartLabels = Object.keys(salaryByTenure[tenure])
-          this.chartData = Object.values(salaryByTenure[tenure])
-
-          this.renderPieChart()
-        })
-    },
-    switchCanvas(canvasRef) {
-      console.log('切換圖表', canvasRef)
-      if (canvasRef === 'frontendChartCanvas') {
-        this.showFrontend = true
-        this.canvasRef = this.$refs.frontendChartCanvas
-        this.renderPieChart(this.canvasRef)
-        console.log(this.canvasRef)
-      } else if (canvasRef === 'designerChartCanvas') {
-        this.showFrontend = false
-        this.canvasRef = this.$refs.designerChartCanvas
-        this.renderPieChart(this.canvasRef)
-      }
-    },
-    selectTenurePie(tenure, jobType) {
-      let url =
-        'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
-      if (jobType === 'designer') {
+        showFrontend.value = true
+        canvasRef.value = frontendChartCanvas.value
+        console.log(canvasRef.value)
+      } else if (jobType === 'designer') {
+        console.log(jobType)
         url = 'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json'
+        showFrontend.value = false
+        canvasRef.value = designerChartCanvas.value
+        console.log(canvasRef.value)
       }
-      this.$http.get(url).then((res) => {
-        const salaryByTenure = res.data.reduce((acc, cur) => {
-          const { job_tenure, salary } = cur.company
-          acc[job_tenure] = Object.assign(acc[job_tenure] || {}, {
-            [salary]: ((acc[job_tenure] && acc[job_tenure][salary]) || 0) + 1
-          })
+
+      axios.get(url).then((res) => {
+        salaries.value = res.data.map((item) => {
+          return item.company.salary
+        })
+
+        salaryCountAll.value = salaries.value.reduce((acc, val) => {
+          if (!acc[val]) {
+            acc[val] = 1
+          } else {
+            acc[val]++
+          }
           return acc
         }, {})
-        this.tenures = Object.keys(salaryByTenure) //年資 key
-        this.tenures.pop()
 
-        this.chartLabels = Object.keys(salaryByTenure[tenure])
-        console.log(this.chartLabels)
-        this.chartData = Object.values(salaryByTenure[tenure])
-        this.renderPieChart(this.canvasRef)
+        chartLabelsAll.value = Object.keys(salaryCountAll.value)
+        chartDataAll.value = Object.values(salaryCountAll.value)
+
+        console.log(chartLabelsAll.value, chartLabelsAll.value, chartDataAll.value)
+        renderChart(canvasRef.value)
       })
-    },
-    renderPieChart(canvasRef) {
-      if (!canvasRef) {
-        return // 當 canvasRef 為 null 或 undefined 時退出函數
+    }
+
+    const renderChart = (renderCanvasRef) => {
+      if (!renderCanvasRef) {
+        return // 當 RenderCanvasRef 為 null 或 undefined 時退出函數
       }
-      if (canvasRef.chart) {
-        canvasRef.chart.destroy()
+      if (renderCanvasRef.chart) {
+        renderCanvasRef.chart.destroy()
       }
       // 創建新的圖表實例
-      const ctx = canvasRef.getContext('2d')
-      canvasRef.chart = new Chart(ctx, {
+      const ctx = renderCanvasRef.getContext('2d')
+      renderCanvasRef.chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: this.chartLabelsAll,
+          labels: chartLabelsAll.value,
           datasets: [
             {
-              data: this.chartDataAll,
+              data: chartDataAll.value,
               backgroundColor: ['rgba(135, 91, 87, 1)']
             }
           ]
         }
       })
     }
-  },
-  mounted() {
-    this.switchCanvas('frontendChartCanvas')
-    this.selectTenurePie('1 年以下', 'frontend')
-    this.renderPieChart(this.canvasRef)
-    this.getFrontend()
+    onMounted(() => {
+      getAllAverageSalary('frontend')
+      renderChart(canvasRef.value)
+    })
+    return {
+      salaries,
+      salaryCountAll,
+      chartLabelsAll,
+      chartDataAll,
+      showFrontend,
+      canvasRef,
+      getAllAverageSalary,
+      renderChart
+    }
   }
 }
 </script>

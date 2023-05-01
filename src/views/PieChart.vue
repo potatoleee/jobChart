@@ -63,7 +63,6 @@ export default {
         showFrontend.value = true
         canvasRef.value = frontendChartCanvas.value
         console.log(canvasRef.value)
-        renderPieChart(canvasRef.value)
 
         // canvasRef.value = frontendChartCanvas.value
         selectTenurePie('1 年以下', 'frontend')
@@ -73,9 +72,9 @@ export default {
 
         canvasRef.value = designerChartCanvas.value
 
-        renderPieChart(canvasRef.value)
         selectTenurePie('1 年以下', 'designer')
       }
+      renderPieChart(canvasRef.value)
     }
     onMounted(() => {
       console.log(canvasRef.value)
@@ -110,7 +109,8 @@ export default {
     const renderPieChart = (PieCanvasRef) => {
       if (!PieCanvasRef) {
         console.log('PieCanvasRef===null')
-        return // 當 canvasRef 為 null 或 undefined 時退出函數
+        // 創建一個新的 canvas 元素
+        return
       }
       if (PieCanvasRef.chart) {
         PieCanvasRef.chart.destroy()
