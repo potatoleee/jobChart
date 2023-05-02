@@ -69,15 +69,12 @@ export default {
     const designerChartCanvas = ref(null)
     const switchCanvas = (chartCanvasRef) => {
       if (chartCanvasRef === 'frontendChartCanvas') {
-        console.log('目前職位:', chartCanvasRef, canvasRef)
         showFrontend.value = true
         canvasRef.value = frontendChartCanvas.value
-        console.log(canvasRef.value)
 
         // canvasRef.value = frontendChartCanvas.value
         selectTenurePie('1 年以下', 'frontend')
       } else if (chartCanvasRef === 'designerChartCanvas') {
-        console.log('目前職位:', chartCanvasRef, canvasRef)
         showFrontend.value = false
 
         canvasRef.value = designerChartCanvas.value
@@ -87,7 +84,6 @@ export default {
       renderPieChart(canvasRef.value)
     }
     onMounted(() => {
-      console.log(canvasRef.value)
       switchCanvas('frontendChartCanvas')
     })
 
@@ -106,7 +102,7 @@ export default {
           })
           return acc
         }, {})
-        console.log(salaryByTenure.value)
+
         tenures.value = Object.keys(salaryByTenure.value) //年資 key
         tenures.value.pop()
 
@@ -118,7 +114,6 @@ export default {
 
     const renderPieChart = (PieCanvasRef) => {
       if (!PieCanvasRef) {
-        console.log('PieCanvasRef===null')
         // 創建一個新的 canvas 元素
         return
       }

@@ -80,7 +80,6 @@ export default {
           'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
         )
         .then((res) => {
-          console.log(res.data)
           this.frontendData = res.data
           const salaryByTenure = this.frontendData.reduce((acc, cur) => {
             const { job_tenure, salary } = cur.company
@@ -90,13 +89,10 @@ export default {
             return acc
           }, {})
 
-          console.log('年資:薪資', salaryByTenure)
-          console.log(salaryByTenure['1 年以下'])
           this.chartLabels = Object.keys(salaryByTenure['1 年以下'])
           this.chartData = Object.values(salaryByTenure['1 年以下'])
 
           this.tenures = Object.keys(salaryByTenure) //年資 key
-          console.log(this.tenures)
 
           this.jobTenure = res.data.map((item) => {
             return item.company.job_tenure
@@ -106,7 +102,7 @@ export default {
             // 移除「萬」字樣，转化为数字并除以 1000
             return item.company.salary.replace('萬', '')
           })
-          console.log('全部薪資陣列', this.salaries)
+
           this.salaryCountAll = this.salaries.reduce((acc, val) => {
             if (!acc[val]) {
               acc[val] = 1
@@ -133,7 +129,7 @@ export default {
           }, {})
           this.tenures = Object.keys(salaryByTenure) //年資 key
           this.tenures.pop()
-          console.log(salaryByTenure[tenure])
+
           this.chartLabels = Object.keys(salaryByTenure[tenure])
           this.chartData = Object.values(salaryByTenure[tenure])
 
@@ -141,12 +137,10 @@ export default {
         })
     },
     switchCanvas(canvasRef) {
-      console.log('切換圖表', canvasRef)
       if (canvasRef === 'frontendChartCanvas') {
         this.showFrontend = true
         this.canvasRef = this.$refs.frontendChartCanvas
         this.renderPieChart(this.canvasRef)
-        console.log(this.canvasRef)
       } else if (canvasRef === 'designerChartCanvas') {
         this.showFrontend = false
         this.canvasRef = this.$refs.designerChartCanvas

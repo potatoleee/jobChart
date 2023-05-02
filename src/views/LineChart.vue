@@ -47,13 +47,11 @@ export default {
     const getAllAverageSalary = (jobType) => {
       let url = ''
       if (jobType === 'frontend') {
-        console.log(jobType, canvasRef)
         url =
           'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
         showFrontend.value = true
         canvasRef.value = frontendChartCanvas.value
       } else if (jobType === 'designer') {
-        console.log(jobType)
         url = 'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json'
         showFrontend.value = false
         canvasRef.value = designerChartCanvas.value
