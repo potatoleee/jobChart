@@ -1,5 +1,4 @@
 <template>
-  <div>這是長條圖</div>
   <div class="col-12 d-flex align-items-center justify-content-center">
     <button
       type="button"
@@ -19,19 +18,31 @@
     </button>
   </div>
   <div v-if="showFrontend">
-    <select v-model="selectedTenure" @change="selectTenurePie(selectedTenure, 'frontend')">
-      <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
-        {{ tenure }}
-      </option>
-    </select>
+    <div class="d-flex justify-content-end mb-6">
+      <select
+        v-model="selectedTenure"
+        @change="selectTenurePie(selectedTenure, 'frontend')"
+        class="bg-primary text-light py-2 px-10 rounded"
+      >
+        <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+          {{ tenure }}
+        </option>
+      </select>
+    </div>
     <canvas ref="frontendChartCanvas"></canvas>
   </div>
   <div v-if="!showFrontend">
-    <select v-model="selectedTenure" @change="selectTenurePie(selectedTenure, 'designer')">
-      <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
-        {{ tenure }}
-      </option>
-    </select>
+    <div class="d-flex justify-content-end mb-6">
+      <select
+        v-model="selectedTenure"
+        @change="selectTenurePie(selectedTenure, 'designer')"
+        class="bg-primary text-light py-2 px-10 rounded"
+      >
+        <option v-for="tenure in tenures" :value="tenure" :key="tenure + '年'">
+          {{ tenure }}
+        </option>
+      </select>
+    </div>
     <canvas v-if="!showFrontend" ref="designerChartCanvas"></canvas>
   </div>
 </template>
@@ -123,6 +134,7 @@ export default {
           labels: chartLabels.value,
           datasets: [
             {
+              label: '平均年薪',
               data: chartData.value,
               backgroundColor: ['rgba(135, 91, 87, 1)']
             }

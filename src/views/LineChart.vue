@@ -1,5 +1,4 @@
 <template>
-  <div>這是折線圖</div>
   <div class="col-12 d-flex align-items-center justify-content-center">
     <button
       type="button"
@@ -96,6 +95,7 @@ export default {
           labels: chartLabelsAll.value,
           datasets: [
             {
+              label: '平均年薪',
               data: chartDataAll.value,
               borderColor: ['rgba(135, 91, 87, 1)']
             }

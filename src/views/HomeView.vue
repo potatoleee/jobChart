@@ -8,10 +8,14 @@
           <div class="shadow">
             <h2 class="bg-light p-6 fs-lg fw-bold mb-0 rounded-top-3 bg-white">資訊類別</h2>
             <ul class="list-group bg-white mb-6">
-              <li class="list-group-item p-6 text-primary rounded-top-0 border-0">平均年薪</li>
-              <li class="list-group-item p-6 text-primary border-0">首份工作使用技術及軟體</li>
-              <li class="list-group-item p-6 text-primary border-0">工作相關資訊</li>
-              <li class="list-group-item p-6 text-primary border-0">薪資與產業滿意度</li>
+              <li class="list-group-item p-6 rounded-top-0 border-0 bg-primary text-light">
+                平均年薪
+              </li>
+              <li class="list-group-item p-6 text-primary border-0" disabled>
+                首份工作使用技術及軟體
+              </li>
+              <li class="list-group-item p-6 text-primary border-0" disabled>工作相關資訊</li>
+              <li class="list-group-item p-6 text-primary border-0" disabled>薪資與產業滿意度</li>
             </ul>
           </div>
           <div class="shadow">
