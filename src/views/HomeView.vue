@@ -5,26 +5,32 @@
 
       <div class="row">
         <div class="col-3">
-          <div>
-            <h2 class="bg-primary text-light p-6 fs-sm mb-0 rounded-top-3">資訊類別</h2>
-            <ul class="list-group mb-6">
-              <li class="list-group-item p-6 text-primary">平均年薪</li>
-              <li class="list-group-item p-6 text-primary">首份工作使用技術及軟體</li>
-              <li class="list-group-item p-6 text-primary">工作相關資訊</li>
-              <li class="list-group-item p-6 text-primary">薪資與產業滿意度</li>
+          <div class="shadow">
+            <h2 class="bg-light p-6 fs-lg fw-bold mb-0 rounded-top-3 bg-white">資訊類別</h2>
+            <ul class="list-group bg-white mb-6">
+              <li class="list-group-item p-6 text-primary rounded-top-0 border-0">平均年薪</li>
+              <li class="list-group-item p-6 text-primary border-0">首份工作使用技術及軟體</li>
+              <li class="list-group-item p-6 text-primary border-0">工作相關資訊</li>
+              <li class="list-group-item p-6 text-primary border-0">薪資與產業滿意度</li>
             </ul>
           </div>
-          <div>
-            <h2 class="bg-primary text-light p-6 fs-sm mb-0 rounded-top-3">圖表類別</h2>
+          <div class="shadow">
+            <h2 class="p-6 fs-lg fw-bold rounded-top-3 bg-white">圖表類別</h2>
             <ul class="list-group mb-6">
               <li>
-                <RouterLink to="/" class="list-group-item p-6 text-primary">圓餅圖</RouterLink>
+                <RouterLink to="/" class="list-group-item p-6 text-primary border-0"
+                  >圓餅圖</RouterLink
+                >
               </li>
               <li>
-                <RouterLink to="line" class="list-group-item p-6 text-primary">折線圖</RouterLink>
+                <RouterLink to="line" class="list-group-item p-6 text-primary border-0"
+                  >折線圖</RouterLink
+                >
               </li>
               <li>
-                <RouterLink to="bar" class="list-group-item p-6 text-primary">長條圖</RouterLink>
+                <RouterLink to="bar" class="list-group-item p-6 text-primary border-0"
+                  >長條圖</RouterLink
+                >
               </li>
             </ul>
           </div>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 const router = createRouter({
-  // linkActiveClass: 'bg-primary',
+  linkExactActiveClass: 'bg-primary text-light',
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {

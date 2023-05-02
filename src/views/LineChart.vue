@@ -53,20 +53,17 @@ export default {
           'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
         showFrontend.value = true
         canvasRef.value = frontendChartCanvas.value
-        console.log(canvasRef.value)
       } else if (jobType === 'designer') {
         console.log(jobType)
         url = 'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/ui_data.json'
         showFrontend.value = false
         canvasRef.value = designerChartCanvas.value
-        console.log(canvasRef.value)
       }
 
       axios.get(url).then((res) => {
         salaries.value = res.data.map((item) => {
           return item.company.salary
         })
-        console.log(salaries.value)
 
         salaryCountAll.value = salaries.value.reduce((acc, val) => {
           if (!acc[val]) {
@@ -80,7 +77,6 @@ export default {
         chartLabelsAll.value = Object.keys(salaryCountAll.value)
         chartDataAll.value = Object.values(salaryCountAll.value)
 
-        console.log(chartLabelsAll.value, chartDataAll.value)
         renderChart(canvasRef.value)
       })
     }
@@ -117,9 +113,11 @@ export default {
       chartLabelsAll,
       chartDataAll,
       showFrontend,
-      canvasRef,
       getAllAverageSalary,
-      renderChart
+      renderChart,
+      canvasRef,
+      frontendChartCanvas,
+      designerChartCanvas
     }
   }
 }
