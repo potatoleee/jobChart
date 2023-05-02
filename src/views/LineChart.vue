@@ -48,7 +48,7 @@ export default {
     const getAllAverageSalary = (jobType) => {
       let url = ''
       if (jobType === 'frontend') {
-        console.log(jobType)
+        console.log(jobType, canvasRef)
         url =
           'https://raw.githubusercontent.com/hexschool/2021-ui-frontend-job/master/frontend_data.json'
         showFrontend.value = true
@@ -66,6 +66,7 @@ export default {
         salaries.value = res.data.map((item) => {
           return item.company.salary
         })
+        console.log(salaries.value)
 
         salaryCountAll.value = salaries.value.reduce((acc, val) => {
           if (!acc[val]) {
@@ -79,7 +80,7 @@ export default {
         chartLabelsAll.value = Object.keys(salaryCountAll.value)
         chartDataAll.value = Object.values(salaryCountAll.value)
 
-        console.log(chartLabelsAll.value, chartLabelsAll.value, chartDataAll.value)
+        console.log(chartLabelsAll.value, chartDataAll.value)
         renderChart(canvasRef.value)
       })
     }
@@ -100,7 +101,7 @@ export default {
           datasets: [
             {
               data: chartDataAll.value,
-              backgroundColor: ['rgba(135, 91, 87, 1)']
+              borderColor: ['rgba(135, 91, 87, 1)']
             }
           ]
         }
