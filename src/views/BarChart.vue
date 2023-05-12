@@ -67,6 +67,7 @@ export default {
     const canvasRef = ref(null)
     const frontendChartCanvas = ref(null)
     const designerChartCanvas = ref(null)
+
     const switchCanvas = (chartCanvasRef) => {
       if (chartCanvasRef === 'frontendChartCanvas') {
         showFrontend.value = true
@@ -86,7 +87,20 @@ export default {
     onMounted(() => {
       switchCanvas('frontendChartCanvas')
     })
-
+    const testCallData = ref({})
+    const testCall = () => {
+      axios
+        .get('http://192.168.68.108:8080/polls/')
+        .then((res) => {
+          console.log(res.json())
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    onMounted(() => {
+      testCall()
+    })
     const salaryByTenure = ref({})
     const selectTenurePie = (tenure, jobType) => {
       let url =
@@ -157,7 +171,9 @@ export default {
       canvasRef,
       switchCanvas,
       selectTenurePie,
-      renderPieChart
+      renderPieChart,
+      testCallData,
+      testCall
     }
   }
 }
